@@ -4,7 +4,8 @@ FROM $GH_REPO/base:latest${BASE_TAG_SUFFIX}
 
 RUN \
     git clone --filter=blob:none https://github.com/mstorsjo/llvm-mingw /llvm-mingw && cd /llvm-mingw && \
-    ./build-all.sh --use-linker=bfd --disable-lldb --disable-lldb-mi /opt/llvm-mingw && \
+    sed -i 's/-DLLVM_TARGETS_TO_BUILD="[^"]*"/-DLLVM_TARGETS_TO_BUILD="AArch64;NVPTX"/' build-llvm.sh && \
+    ./build-all.sh --disable-clang-tools-extra --disable-lldb --disable-lldb-mi /opt/llvm-mingw && \
     cd / && \
     rm -rf llvm-mingw
 
